@@ -2,10 +2,12 @@ package com.api.gestaodehotel.domain;
 
 import com.api.gestaodehotel.domain.enums.TipoQuarto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
+@AllArgsConstructor
 @Data
 @Entity
 @Table(name = "quarto")
@@ -30,5 +32,5 @@ public class Quarto {
     private String descricao;
 
     @Column(nullable = false)
-    private Boolean ativo = true;
+    private Boolean ativo;
 }
