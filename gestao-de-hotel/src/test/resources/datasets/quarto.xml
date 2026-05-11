@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <quarto numero_quarto="1" tipo_quarto="SOLTEIRO"
+            capacidade="1" preco_por_noite="175.00"
+            descricao="Quarto solteiro teste" ativo="true"/>
+
+    <quarto numero_quarto="2" tipo_quarto="CASAL"
+            capacidade="2" preco_por_noite="250.00"
+            descricao="Quarto casal teste" ativo="true"/>
+
+    <quarto numero_quarto="3" tipo_quarto="SUITE"
+            capacidade="3" preco_por_noite="500.00"
+            descricao="Suite teste" ativo="false"/>
+</dataset>
