@@ -4,10 +4,12 @@ import com.api.gestaodehotel.domain.enums.TipoQuarto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "quarto")
@@ -20,7 +22,7 @@ public class Quarto {
     private Integer numeroQuarto;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20)")
     private TipoQuarto tipoQuarto;
 
     @Column(nullable = false)

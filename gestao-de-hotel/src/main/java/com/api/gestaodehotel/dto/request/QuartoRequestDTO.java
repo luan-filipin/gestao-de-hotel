@@ -6,16 +6,16 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record QuartoRequestDTO(
-        @NotNull
+        @NotNull(message = "O numero do quarto é obrigatorio.")
         Integer numeroQuarto,
 
-        @NotNull
+        @NotNull(message = "O tipo do quarto é obrigatorio.")
         TipoQuarto tipoQuarto,
 
-        @NotNull
+        @NotNull(message = "A capacidade do quarto é obrigado.")
         Integer capacidade,
 
-        @NotNull
+        @NotNull(message = "O preco do quarto é obrigatorio.")
         BigDecimal precoPorNoite,
 
         String descricao
