@@ -5,7 +5,6 @@ import com.api.gestaodehotel.dto.request.QuartoUpdateRequestDTO;
 import com.api.gestaodehotel.dto.response.QuartoResponseDTO;
 import com.api.gestaodehotel.service.QuartoService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,33 +25,37 @@ public class QuartoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(quartoCriado);
     }
 
-    @GetMapping("/buscarPeloNumeroDoQuarto")
+    @GetMapping("/{numeroQuarto}")
     public ResponseEntity<QuartoResponseDTO> buscaQuartoPeloNumeroDoQuarto(
-            @Valid
-            @NotNull(message = "O numero do quarto é obrigatorio.") Integer numeroQuarto){
+            @PathVariable
+            Integer numeroQuarto){
         QuartoResponseDTO quarto = quartoService.buscarQuartoPorNumeroDoQuarto(numeroQuarto);
         return ResponseEntity.ok(quarto);
     }
 
-    @GetMapping("/buscarTodosPeloStatus")
-    public ResponseEntity<List<QuartoResponseDTO>> buscaTodosOsQuartosPeloStatus(Boolean ativo){
+    @GetMapping()
+    public ResponseEntity<List<QuartoResponseDTO>> buscaTodosOsQuartosPeloStatus(
+            @RequestParam(required = false)
+            Boolean ativo){
         List<QuartoResponseDTO> quartos = quartoService.buscarTodosQuartos(ativo);
         return ResponseEntity.ok(quartos);
     }
 
-    @PatchMapping("/desativar")
+    @PatchMapping("/desativar/{numeroQuarto}")
     public ResponseEntity<Void> desativarQuarto(
-            @Valid
-            @NotNull(message = "O numero do quarto é obrigatorio") Integer numeroQuarto){
+            @PathVariable
+             Integer numeroQuarto){
         quartoService.desativarQuarto(numeroQuarto);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/atualizar")
+    @PatchMapping("/atualizar/{numeroQuarto}")
     public ResponseEntity<QuartoResponseDTO> atualizaQuarto(
             @RequestBody
-            @Valid QuartoUpdateRequestDTO dto,
-            @Valid Integer numeroQuarto){
+            @Valid
+            QuartoUpdateRequestDTO dto,
+            @PathVariable
+            Integer numeroQuarto){
         QuartoResponseDTO quartoAtualizado = quartoService.atualizarQuarto(numeroQuarto, dto);
         return ResponseEntity.ok(quartoAtualizado);
     }
