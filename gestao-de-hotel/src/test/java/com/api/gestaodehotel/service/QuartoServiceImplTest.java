@@ -5,8 +5,10 @@ import com.api.gestaodehotel.domain.enums.TipoQuarto;
 import com.api.gestaodehotel.dto.request.QuartoRequestDTO;
 import com.api.gestaodehotel.dto.request.QuartoUpdateRequestDTO;
 import com.api.gestaodehotel.dto.response.QuartoResponseDTO;
+import com.api.gestaodehotel.exceptions.QuartoEstaInativoException;
 import com.api.gestaodehotel.exceptions.QuartoExistenteException;
 import com.api.gestaodehotel.exceptions.QuartoNaoExisteException;
+import com.api.gestaodehotel.fixture.QuartoFixture;
 import com.api.gestaodehotel.mapper.QuartoMapper;
 import com.api.gestaodehotel.repository.QuartoRepository;
 import com.api.gestaodehotel.service.impl.QuartoServiceImpl;
@@ -28,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class QuartoServiceImplTest {
+class QuartoServiceImplTest {
 
     private QuartoValidador quartoValidador;
 
@@ -47,8 +49,8 @@ public class QuartoServiceImplTest {
 
     @Test
     void deveCriarQuarto() {
-        QuartoRequestDTO quartoRequestDTO = criarRequestDTO();
-        Quarto quartoSalvo = criaQuartoDomain(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
+        QuartoRequestDTO quartoRequestDTO = QuartoFixture.criarRequestDTO(1);
+        Quarto quartoSalvo = QuartoFixture.criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
 
         when(quartoRepository.save(any(Quarto.class))).thenReturn(quartoSalvo);
 
@@ -68,7 +70,7 @@ public class QuartoServiceImplTest {
 
     @Test
     void deveLancarExceptionSeQuartoJaExistir(){
-        QuartoRequestDTO quartoRequestDTO = criarRequestDTO();
+        QuartoRequestDTO quartoRequestDTO = QuartoFixture.criarRequestDTO(1);
 
         when(quartoRepository.existsByNumeroQuarto(1)).thenReturn(true);
 
@@ -84,7 +86,7 @@ public class QuartoServiceImplTest {
     void deveBuscarQuartoPeloNumeroDoQuarto(){
 
         Integer numeroQuarto = 1;
-        Quarto quarto = criaQuartoDomain(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
+        Quarto quarto = QuartoFixture.criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
 
         when(quartoRepository.findByNumeroQuarto(numeroQuarto)).thenReturn(Optional.of(quarto));
 
@@ -113,7 +115,7 @@ public class QuartoServiceImplTest {
     void deveBuscarTodosOsQuartosAtivos(){
 
         Boolean ativo = true;
-        List<Quarto> quartosAtivos = criarListaDeQuartosAtivos();
+        List<Quarto> quartosAtivos = QuartoFixture.criarListaDeQuartosTrue();
 
         when(quartoRepository.findByAtivo(ativo)).thenReturn(quartosAtivos);
 
@@ -130,7 +132,7 @@ public class QuartoServiceImplTest {
     void deveBuscarTodoOsQuartosInativos(){
 
         Boolean ativo = false;
-        List<Quarto> quartosInativos = criarListaDeQuartosInativos();
+        List<Quarto> quartosInativos = QuartoFixture.criarListaDeQuartosFalse();
 
         when(quartoRepository.findByAtivo(ativo)).thenReturn(quartosInativos);
 
@@ -148,8 +150,8 @@ public class QuartoServiceImplTest {
     void deveBuscarTodosOsQuartosQuantoAtivoForNulo(){
 
         List<Quarto> quartos = new ArrayList<>();
-        quartos.addAll(criarListaDeQuartosAtivos());
-        quartos.addAll(criarListaDeQuartosInativos());
+        quartos.addAll(QuartoFixture.criarListaDeQuartosTrue());
+        quartos.addAll(QuartoFixture.criarListaDeQuartosFalse());
 
         when(quartoRepository.findByAtivo(null)).thenReturn(quartos);
 
@@ -171,7 +173,7 @@ public class QuartoServiceImplTest {
 
         Integer numeroQuarto = 1;
 
-        Quarto quarto = criaQuartoDomain(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
+        Quarto quarto = QuartoFixture.criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
         when(quartoRepository.findByNumeroQuarto(numeroQuarto)).thenReturn(Optional.of(quarto));
 
         quartoService.desativarQuarto(numeroQuarto);
@@ -197,11 +199,28 @@ public class QuartoServiceImplTest {
     }
 
     @Test
+    void deveLancartExceptionSeQuartoJaEstiverInativo(){
+        Integer numeroQuarto = 1;
+        Quarto quarto = QuartoFixture.criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), false);
+
+        when(quartoRepository.findByNumeroQuarto(numeroQuarto)).thenReturn(Optional.of(quarto));
+
+        assertThatThrownBy(() -> quartoService.desativarQuarto(numeroQuarto))
+                .isInstanceOf(QuartoEstaInativoException.class)
+                .hasMessage("O quarto 1 ja esta inativo");
+    }
+
+    @Test
     void deveAtualizarQuarto(){
 
         Integer numeroQuarto = 1;
-        QuartoUpdateRequestDTO quartoUpdateRequestDTO = criarUpdateRequestDTO();
-        Quarto quarto = criaQuartoDomain(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
+        QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                TipoQuarto.CASAL,
+                2,
+                new BigDecimal("380.00"),
+                "Teste descricao QuartoUpdateRequestDTO"
+        );
+        Quarto quarto = QuartoFixture.criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
 
         when(quartoRepository.findByNumeroQuarto(numeroQuarto)).thenReturn(Optional.of(quarto));
         QuartoResponseDTO resultado = quartoService.atualizarQuarto(numeroQuarto, quartoUpdateRequestDTO);
@@ -225,7 +244,7 @@ public class QuartoServiceImplTest {
                 null,
                 "Teste descricao QuartoUpdateRequestDTO"
         );
-        Quarto quarto = criaQuartoDomain(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
+        Quarto quarto = QuartoFixture.criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
 
         when(quartoRepository.findByNumeroQuarto(numeroQuarto)).thenReturn(Optional.of(quarto));
 
@@ -241,10 +260,15 @@ public class QuartoServiceImplTest {
     }
 
     @Test
-    void deveLancarExceptionSeQuaroNaoExistir(){
+    void deveLancarExceptionSeQuartoNaoExistirParaAtualizar(){
 
         Integer numeroQuarto = 1;
-        QuartoUpdateRequestDTO quartoUpdateRequestDTO = criarUpdateRequestDTO();
+        QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                TipoQuarto.CASAL,
+                2,
+                new BigDecimal("380.00"),
+                "Teste descricao QuartoUpdateRequestDTO"
+        );
 
         when(quartoRepository.findByNumeroQuarto(numeroQuarto)).thenReturn(Optional.empty());
 
@@ -253,62 +277,5 @@ public class QuartoServiceImplTest {
                 .hasMessage("O quarto 1 não foi encontrado");
 
         verify(quartoRepository).findByNumeroQuarto(numeroQuarto);
-    }
-
-
-
-    private QuartoRequestDTO criarRequestDTO(){
-        return new QuartoRequestDTO(
-                1,
-                TipoQuarto.SOLTEIRO,
-                1,
-                new BigDecimal("175.00"),
-                "Teste descricao");
-    }
-
-    private Quarto criaQuartoDomain(
-            Long id,
-            Integer numeroQuarto,
-            TipoQuarto tipoQuarto,
-            Integer capacidade,
-            BigDecimal precoPorNoite,
-            Boolean ativo){
-        return new Quarto(
-                id,
-                numeroQuarto,
-                tipoQuarto,
-                capacidade,
-                precoPorNoite,
-                "Teste descricao",
-                ativo
-
-        );
-    }
-
-    private List<Quarto> criarListaDeQuartosAtivos(){
-
-        Quarto quarto = criaQuartoDomain(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"),true);
-        Quarto quarto2 = criaQuartoDomain(2L, 2, TipoQuarto.CASAL, 2, new BigDecimal("200.00"), true);
-        Quarto quarto3 = criaQuartoDomain(3L, 3, TipoQuarto.SOLTEIRO, 3, new BigDecimal("150.00"), true);
-
-        return List.of(quarto, quarto2, quarto3);
-    }
-
-    private List<Quarto> criarListaDeQuartosInativos(){
-
-        Quarto quarto = criaQuartoDomain(4L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), false);
-        Quarto quarto2 = criaQuartoDomain(5L, 2, TipoQuarto.CASAL, 2, new BigDecimal("200.00"), false);
-        Quarto quarto3 = criaQuartoDomain(6L, 3, TipoQuarto.SOLTEIRO, 3, new BigDecimal("150.00"), false);
-
-        return List.of(quarto, quarto2, quarto3);
-    }
-
-    private QuartoUpdateRequestDTO criarUpdateRequestDTO(){
-        return new QuartoUpdateRequestDTO(
-                TipoQuarto.CASAL,
-                2,
-                new BigDecimal("380.00"),
-                "Teste descricao QuartoUpdateRequestDTO"
-        );
     }
 }

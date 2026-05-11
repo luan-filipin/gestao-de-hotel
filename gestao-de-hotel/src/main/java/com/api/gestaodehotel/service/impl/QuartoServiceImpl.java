@@ -45,7 +45,7 @@ public class QuartoServiceImpl implements QuartoService {
     @Transactional
     @Override
     public void desativarQuarto(Integer numeroQuarto) {
-        Quarto quarto = quartoValidador.buscaQuartoOuLancarException(numeroQuarto);
+        Quarto quarto = quartoValidador.buscaQuartoEValidaSeInativoOuLancaException(numeroQuarto);
         quarto.setAtivo(false);
     }
 
