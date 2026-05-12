@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @DBRider
 @DataSet("datasets/quarto.xml")
-public class QuartoRepositoryIntTest {
+class QuartoRepositoryIntTest {
 
     @Autowired
     private QuartoRepository quartoRepository;

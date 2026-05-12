@@ -21,12 +21,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @DBRider
 @DataSet("datasets/quarto.xml")
-public class QuartoControllerIntTest {
+class QuartoControllerIntTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -82,9 +81,9 @@ public class QuartoControllerIntTest {
 
     @Test
     void deveBuscarQuartoPeloNumero() throws Exception{
-        mockMvc.perform(get("/api/quarto/101"))
+        mockMvc.perform(get("/api/quarto/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.numeroQuarto").value(101));
+                .andExpect(jsonPath("$.numeroQuarto").value(1));
     }
 
     @Test
@@ -120,7 +119,7 @@ public class QuartoControllerIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosAtivos() throws Exception{
-        mockMvc.perform(get("/api/quarto/status/true"))
+        mockMvc.perform(get("/api/quarto").param("ativo", "true"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].numeroQuarto").value(1))
@@ -131,7 +130,7 @@ public class QuartoControllerIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosInativos() throws Exception{
-        mockMvc.perform(get("/api/quarto/status/false"))
+        mockMvc.perform(get("/api/quarto").param("ativo", "false"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].numeroQuarto").value(3))
@@ -140,11 +139,11 @@ public class QuartoControllerIntTest {
 
     @Test
     void deveLancarErroSeStatusNaoForBooleano() throws Exception{
-        mockMvc.perform(get("/api/quarto/status/abc"))
+        mockMvc.perform(get("/api/quarto").param("ativo", "abc"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.mensagem").value("O valor do campo ativo deve ser do tipo Boolean"))
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.path").value("/api/quarto/status/abc"))
+                .andExpect(jsonPath("$.path").value("/api/quarto"))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
 
