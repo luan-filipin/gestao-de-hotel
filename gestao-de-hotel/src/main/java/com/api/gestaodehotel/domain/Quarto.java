@@ -3,14 +3,16 @@ package com.api.gestaodehotel.domain;
 import com.api.gestaodehotel.domain.enums.TipoQuarto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "quarto")
 public class Quarto {
@@ -34,5 +36,5 @@ public class Quarto {
     private String descricao;
 
     @Column(nullable = false)
-    private Boolean ativo;
+    private Boolean ativo = true;
 }

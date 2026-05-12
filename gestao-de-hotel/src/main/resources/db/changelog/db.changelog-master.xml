@@ -6,5 +6,6 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <include file="db/changelog/changes/001-create-table-quarto.xml"/>
+    <include file="db/changelog/changes/002-create-table-hospede.xml"/>
 
 </databaseChangeLog>
