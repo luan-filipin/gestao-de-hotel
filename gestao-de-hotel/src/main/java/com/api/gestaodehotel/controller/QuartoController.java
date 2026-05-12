@@ -33,7 +33,7 @@ public class QuartoController {
         return ResponseEntity.ok(quarto);
     }
 
-    @GetMapping()
+    @GetMapping("/status")
     public ResponseEntity<List<QuartoResponseDTO>> buscaTodosOsQuartosPeloStatus(
             @RequestParam(required = false)
             Boolean ativo){

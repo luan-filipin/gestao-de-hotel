@@ -119,7 +119,7 @@ class QuartoControllerIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosAtivos() throws Exception{
-        mockMvc.perform(get("/api/quarto").param("ativo", "true"))
+        mockMvc.perform(get("/api/quarto/status").param("ativo", "true"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].numeroQuarto").value(1))
@@ -130,7 +130,7 @@ class QuartoControllerIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosInativos() throws Exception{
-        mockMvc.perform(get("/api/quarto").param("ativo", "false"))
+        mockMvc.perform(get("/api/quarto/status").param("ativo", "false"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].numeroQuarto").value(3))
@@ -139,17 +139,17 @@ class QuartoControllerIntTest {
 
     @Test
     void deveLancarErroSeStatusNaoForBooleano() throws Exception{
-        mockMvc.perform(get("/api/quarto").param("ativo", "abc"))
+        mockMvc.perform(get("/api/quarto/status").param("ativo", "abc"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.mensagem").value("O valor do campo ativo deve ser do tipo Boolean"))
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.path").value("/api/quarto"))
+                .andExpect(jsonPath("$.path").value("/api/quarto/status"))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
 
     @Test
     void deveBuscarTodosOsQuartosAtivosEInativos() throws Exception{
-        mockMvc.perform(get("/api/quarto"))
+        mockMvc.perform(get("/api/quarto/status"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3))
                 .andExpect(jsonPath("$[*].ativo", hasItems(true, false)));
