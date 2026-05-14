@@ -30,6 +30,22 @@ public class QuartoServiceImpl implements QuartoService {
         return quartoMapper.toResponse(quartoSalvo);
     }
 
+    @Transactional
+    @Override
+    public List<QuartoResponseDTO> criarQuartosEmLote(List<QuartoRequestDTO> dtos) {
+
+        List<Integer> numerosDosQuartos = dtos.stream()
+                .map(QuartoRequestDTO::numeroQuarto)
+                .toList();
+
+        quartoValidador.validarNumerosDeQuartosDuplicadosNaRequisicao(numerosDosQuartos);
+        numerosDosQuartos.forEach(quartoValidador::validarQuartoExistente);
+
+        List<Quarto> quartosSalvos = quartoRepository.saveAll(quartoMapper.toEntityList(dtos));
+
+        return quartoMapper.toListResponse(quartosSalvos);
+    }
+
     @Override
     public QuartoResponseDTO buscarQuartoPorNumeroDoQuarto(Integer numeroQuarto) {
         Quarto quarto = quartoValidador.buscaQuartoOuLancarException(numeroQuarto);

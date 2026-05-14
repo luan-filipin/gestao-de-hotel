@@ -15,6 +15,11 @@ public interface QuartoMapper {
     @Mapping(target = "ativo", constant = "true")
     Quarto toEntity(QuartoRequestDTO dto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "ativo", constant = "true")
+    List<Quarto> toEntityList(List<QuartoRequestDTO> dtos);
+    List<QuartoResponseDTO> toResponseList(List<Quarto> entity);
+
     QuartoResponseDTO toResponse(Quarto entity);
 
     List<QuartoResponseDTO> toListResponse(List<Quarto> entity);

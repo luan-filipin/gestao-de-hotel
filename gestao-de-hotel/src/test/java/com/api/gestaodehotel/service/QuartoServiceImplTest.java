@@ -5,6 +5,7 @@ import com.api.gestaodehotel.domain.enums.TipoQuarto;
 import com.api.gestaodehotel.dto.request.QuartoRequestDTO;
 import com.api.gestaodehotel.dto.request.QuartoUpdateRequestDTO;
 import com.api.gestaodehotel.dto.response.QuartoResponseDTO;
+import com.api.gestaodehotel.exceptions.NumerosDeQuartosDuplicadosException;
 import com.api.gestaodehotel.exceptions.QuartoEstaInativoException;
 import com.api.gestaodehotel.exceptions.QuartoExistenteException;
 import com.api.gestaodehotel.exceptions.QuartoNaoExisteException;
@@ -80,6 +81,53 @@ class QuartoServiceImplTest {
 
         verify(quartoRepository).existsByNumeroQuarto(1);
         verify(quartoRepository, never()).save(any());
+    }
+
+    @Test
+    void deveCriarQuartosEmLote(){
+
+        QuartoRequestDTO primeiroQuartoDTO = QuartoFixture.criarRequestDTO(1);
+        QuartoRequestDTO segundoQuarto = QuartoFixture.criarRequestDTO(2);
+        QuartoRequestDTO terceiroQuarto = QuartoFixture.criarRequestDTO(3);
+        List<QuartoRequestDTO> quartosEmLoteDTO = List.of(primeiroQuartoDTO, segundoQuarto, terceiroQuarto);
+
+
+        Quarto primeiroQuartoDomain = QuartoFixture.criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
+        Quarto segundoQuartoDomain = QuartoFixture.criarQuarto(2L, 2, TipoQuarto.CASAL, 2, new BigDecimal("200.00"), true);
+        Quarto terceiroQuartoDomain = QuartoFixture.criarQuarto(3L, 3, TipoQuarto.SOLTEIRO, 3, new BigDecimal("150.00"), true);
+        List<Quarto> quartosDomain = List.of(primeiroQuartoDomain, segundoQuartoDomain, terceiroQuartoDomain);
+
+
+        when(quartoRepository.saveAll(anyList())).thenReturn(quartosDomain);
+
+        List<QuartoResponseDTO> resultado = quartoService.criarQuartosEmLote(quartosEmLoteDTO);
+
+        assertThat(resultado).isNotNull().hasSize(3);
+        assertThat(resultado)
+                .extracting(QuartoResponseDTO::id)
+                .containsExactlyInAnyOrder(1L, 2L, 3L);
+    }
+
+    @Test
+    void deveLancarErroSeQuartosDuplicadosNaRequisicao(){
+        List<QuartoRequestDTO> quartosEmLoteDTO = QuartoFixture.criarListaDeQuartosEmLoteDuplicados();
+        assertThatThrownBy(() -> quartoService.criarQuartosEmLote(quartosEmLoteDTO))
+                .isInstanceOf(NumerosDeQuartosDuplicadosException.class)
+                .hasMessage("Números de quarto duplicados na requisição: [1, 2]");
+    }
+
+    @Test
+    void deveLancarErroSeQuartojaExistir() {
+
+        QuartoRequestDTO primeiroQuarto = QuartoFixture.criarRequestDTO(1);
+        QuartoRequestDTO segundoQuarto = QuartoFixture.criarRequestDTO(2);
+        List<QuartoRequestDTO> quartoList = List.of(primeiroQuarto, segundoQuarto);
+
+        when(quartoRepository.existsByNumeroQuarto(1)).thenReturn(true);
+
+        assertThatThrownBy(() -> quartoService.criarQuartosEmLote(quartoList))
+                .isInstanceOf(QuartoExistenteException.class)
+                .hasMessage("Ja existe um quarto com esse numero: 1");
     }
 
     @Test
