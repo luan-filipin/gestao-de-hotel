@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -77,6 +78,63 @@ class QuartoControllerIntTest {
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.erros[0].campo").value("numeroQuarto"))
                 .andExpect(jsonPath("$.erros[0].mensagem").value("O numero do quarto é obrigatorio."));
+    }
+
+    @Test
+    void deveCriarQuartosEmLote() throws  Exception{
+
+        QuartoRequestDTO primeiroQuarto = QuartoFixture.criarRequestDTO(4);
+        QuartoRequestDTO segundoQuarto = QuartoFixture.criarRequestDTO(5);
+        QuartoRequestDTO terceiroQuarto = QuartoFixture.criarRequestDTO(6);
+
+        List<QuartoRequestDTO> quartosEmLoteDTO = List.of(primeiroQuarto, segundoQuarto, terceiroQuarto);
+
+        mockMvc.perform(post("/api/quarto/criar-em-lote")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(quartosEmLoteDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.length()").value(3));
+    }
+
+    @Test
+    void deveLancarErroSeNumeroQuartoDuplicadoEmLote() throws Exception{
+
+        List<QuartoRequestDTO> quartosEmLoteDTO = QuartoFixture.criarListaDeQuartosEmLoteDuplicados();
+
+        mockMvc.perform(post("/api/quarto/criar-em-lote")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(quartosEmLoteDTO)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensagem").value("Números de quarto duplicados na requisição: [1, 2]"))
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.path").value("/api/quarto/criar-em-lote"))
+                .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    @Test
+    void deveLancarErroSeQuartojaExistirEmLote() throws Exception{
+
+        QuartoRequestDTO primeiroQuarto = QuartoFixture.criarRequestDTO(1);
+        QuartoRequestDTO segundoQuarto = QuartoFixture.criarRequestDTO(4);
+        List<QuartoRequestDTO> quartoList = List.of(primeiroQuarto, segundoQuarto);
+
+        mockMvc.perform(post("/api/quarto/criar-em-lote")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(quartoList)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensagem").value("Ja existe um quarto com esse numero: 1"))
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.path").value("/api/quarto/criar-em-lote"))
+                .andExpect(jsonPath("$.timestamp").exists());
+
+    }
+
+    @Test
+    void deveLancarErroSeRequisicaoNaoForValidaEmLote() throws Exception{
+        mockMvc.perform(post("/api/quarto/criar-em-lote")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("[{}]"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

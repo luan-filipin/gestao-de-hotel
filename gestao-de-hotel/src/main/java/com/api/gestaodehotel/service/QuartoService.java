@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface QuartoService {
     QuartoResponseDTO criarQuarto(QuartoRequestDTO dto);
+    List<QuartoResponseDTO> criarQuartosEmLote(List<QuartoRequestDTO> dtos);
     QuartoResponseDTO buscarQuartoPorNumeroDoQuarto(Integer numeroQuarto);
     List<QuartoResponseDTO> buscarTodosQuartos(Boolean ativo);
     void desativarQuarto(Integer numeroQuarto);

@@ -62,4 +62,13 @@ public class QuartoFixture {
                 descricao
         );
     }
+
+    public static List<QuartoRequestDTO> criarListaDeQuartosEmLoteDuplicados(){
+        return List.of(
+                new QuartoRequestDTO(1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("130.00"), "Teste descricao solteiro"),
+                new QuartoRequestDTO(1, TipoQuarto.CASAL, 2, new BigDecimal("250.00"), "Teste descricao casal"),
+                new QuartoRequestDTO(2, TipoQuarto.FAMILIA, 3, new BigDecimal("380.00"), "Teste descricao familia"),
+                new QuartoRequestDTO(2, TipoQuarto.SUITE, 2, new BigDecimal("480.00"), "Teste descricao suite")
+        );
+    }
 }

@@ -2,9 +2,12 @@ package com.api.gestaodehotel.config;
 
 import com.api.gestaodehotel.dto.response.ErroCampoDTO;
 import com.api.gestaodehotel.dto.response.ErroResponseDTO;
+import com.api.gestaodehotel.exceptions.NumerosDeQuartosDuplicadosException;
 import com.api.gestaodehotel.exceptions.QuartoExistenteException;
 import com.api.gestaodehotel.exceptions.QuartoNaoExisteException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +17,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -43,6 +47,15 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(NumerosDeQuartosDuplicadosException.class)
+    public ResponseEntity<ErroResponseDTO> handlerNumerosDeQuartosDuplicados(NumerosDeQuartosDuplicadosException ex, HttpServletRequest request) {
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -80,6 +93,22 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErroResponseDTO> handlerConstrainViolationException(HttpServletRequest request, ConstraintViolationException ex){
+        String menssagem = ex.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.joining(", "));
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                menssagem,
+                HttpStatus.BAD_REQUEST.value(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
 }
