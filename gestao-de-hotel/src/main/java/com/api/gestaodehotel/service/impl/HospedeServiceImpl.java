@@ -52,7 +52,6 @@ public class HospedeServiceImpl implements HospedeService {
     @Override
     public HospedeResponseDTO atualizarHospede(String cpf, HospedeUpdateRequestDTO dto) {
         Hospede hospede = hospedeValidador.validaSeHospedeNaoExistePeloCpf(cpf);
-        hospedeValidador.validaSeHospedeExiste(dto.cpf());
         hospedeMapper.updateEntity(dto, hospede);
         return hospedeMapper.toDTO(hospede);
     }

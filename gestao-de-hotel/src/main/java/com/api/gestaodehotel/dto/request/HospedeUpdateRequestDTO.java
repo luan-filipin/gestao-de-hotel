@@ -1,7 +1,6 @@
 package com.api.gestaodehotel.dto.request;
 
 import com.api.gestaodehotel.domain.enums.Nacionalidade;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
@@ -10,10 +9,6 @@ import java.time.LocalDate;
 public record HospedeUpdateRequestDTO(
         @Size(max = 150)
         String nome,
-
-        @NotBlank(message = "O campo cpf é obrigatorio")
-        @Size(max = 11)
-        String cpf,
 
         @Size(max = 20)
         String telefone,

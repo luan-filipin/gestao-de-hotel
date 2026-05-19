@@ -178,7 +178,6 @@ class HospedeControllerIntTest {
                 .content(objectMapper.writeValueAsString(hospedeUpdateRequestDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Luan"))
-                .andExpect(jsonPath("$.cpf").value("45879658241"))
                 .andExpect(jsonPath("$.email").value("luan@gmail.com"))
                 .andExpect(jsonPath("$.dataNascimento").value("1992-05-02"))
                 .andExpect(jsonPath("$.nacionalidade").value("ESTRANGEIRO"));
@@ -204,13 +203,5 @@ class HospedeControllerIntTest {
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.path").value("/api/hospede/atualizar/abc"))
                 .andExpect(jsonPath("$.timestamp").exists());
-    }
-
-    @Test
-    void deveLancarErroSeRequisicaoForInvalidaParaAtualiar() throws Exception{
-        mockMvc.perform(patch("/api/hospede/atualizar/12345778912")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isBadRequest());
     }
 }

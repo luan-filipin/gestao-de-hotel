@@ -60,6 +60,6 @@ public class HospedeFixture {
     }
 
     public static HospedeUpdateRequestDTO criarUpdateRequestDTO(String nome, String cpf, String telefone, String email, LocalDate dataNascimento, Nacionalidade nacionalidade, String observacao){
-        return new HospedeUpdateRequestDTO(nome, cpf, telefone, email, dataNascimento, nacionalidade, observacao);
+        return new HospedeUpdateRequestDTO(nome, telefone, email, dataNascimento, nacionalidade, observacao);
     }
 }
