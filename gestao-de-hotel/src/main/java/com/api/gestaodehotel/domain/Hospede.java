@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,9 +22,6 @@ public class Hospede {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 10)
-    private String codigo;
-
     @Column(nullable = false, length = 150)
     private String nome;
 
@@ -33,12 +31,13 @@ public class Hospede {
     @Column(nullable = false, length = 20)
     private String telefone;
 
-    @Column(unique = true, length = 150)
+    @Column(length = 150)
     private String email;
 
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
+    @CreationTimestamp
     @Column(name = "data_cadastro", nullable = false)
     private LocalDateTime dataCadastro;
 
@@ -49,5 +48,6 @@ public class Hospede {
     @Column(nullable = false)
     private Boolean ativo = true;
 
+    @Column(length = 300)
     private String observacao;
 }

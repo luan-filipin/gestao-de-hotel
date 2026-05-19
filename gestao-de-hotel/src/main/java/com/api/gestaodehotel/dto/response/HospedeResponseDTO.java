@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public record HospedeResponseDTO (
 
         Long id,
-        String codigo,
+        String nome,
         String cpf,
         String telefone,
         String email,
@@ -16,6 +16,6 @@ public record HospedeResponseDTO (
         LocalDateTime dataCadastro,
         Nacionalidade nacionalidade,
         Boolean ativo,
-        String descricao
+        String observacao
 ){
 }

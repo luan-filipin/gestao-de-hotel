@@ -2,7 +2,6 @@ package com.api.gestaodehotel.dto.request;
 
 import com.api.gestaodehotel.domain.enums.Nacionalidade;
 import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
@@ -13,8 +12,8 @@ public record HospedeRequestDTO(
         String nome,
 
         @NotBlank(message = "O campo cpf é obrigatorio")
+        @Pattern(regexp = "\\d{11}", message = "CPF deve conter apenas 11 dígitos numéricos")
         @Size(max = 11)
-        @CPF
         String cpf,
 
         @NotBlank(message = "O campo telefone é obrigatorio")
@@ -30,9 +29,8 @@ public record HospedeRequestDTO(
         LocalDate dataNascimento,
 
         @NotNull(message = "A nacionalidade é obrigatoria")
-        @Size(max = 20)
         Nacionalidade nacionalidade,
 
-        String descricao
+        String observacao
 ) {
 }
