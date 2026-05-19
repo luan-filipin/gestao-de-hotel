@@ -48,18 +48,24 @@ class QuartoRepositoryIntTest {
     @Test
     void deveBuscarTodosOsQuartosComStatusTrue(){
         List<Quarto> quartos = quartoRepository.findByAtivo(true);
-        assertThat(quartos).hasSize(2);
+        assertThat(quartos).hasSize(2)
+                .extracting(Quarto::getAtivo)
+                .containsOnly(true);
     }
 
     @Test
     void deveBuscarTodosOsQuartosComStatusFalse(){
         List<Quarto> quartos = quartoRepository.findByAtivo(false);
-        assertThat(quartos).hasSize(1);
+        assertThat(quartos).hasSize(1)
+                .extracting(Quarto::getAtivo)
+                .containsOnly(false);
     }
 
     @Test
     void deveBuscarTodosOsQuartosComStatusNull(){
         List<Quarto> quartos = quartoRepository.findByAtivo(null);
-        assertThat(quartos).hasSize(3);
+        assertThat(quartos).hasSize(3)
+                .extracting(Quarto::getAtivo)
+                .containsExactlyInAnyOrder(true, true, false);
     }
 }

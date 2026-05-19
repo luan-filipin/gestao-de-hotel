@@ -27,7 +27,7 @@ public class QuartoServiceImpl implements QuartoService {
     public QuartoResponseDTO criarQuarto(QuartoRequestDTO dto) {
         quartoValidador.validarQuartoExistente(dto.numeroQuarto());
         Quarto quartoSalvo = quartoRepository.save(quartoMapper.toEntity(dto));
-        return quartoMapper.toResponse(quartoSalvo);
+        return quartoMapper.toDTO(quartoSalvo);
     }
 
     @Transactional
@@ -49,7 +49,7 @@ public class QuartoServiceImpl implements QuartoService {
     @Override
     public QuartoResponseDTO buscarQuartoPorNumeroDoQuarto(Integer numeroQuarto) {
         Quarto quarto = quartoValidador.buscaQuartoOuLancarException(numeroQuarto);
-        return quartoMapper.toResponse(quarto);
+        return quartoMapper.toDTO(quarto);
     }
 
     @Override
@@ -70,6 +70,6 @@ public class QuartoServiceImpl implements QuartoService {
     public QuartoResponseDTO atualizarQuarto(Integer numeroQuarto, QuartoUpdateRequestDTO dto) {
         Quarto quarto = quartoValidador.buscaQuartoOuLancarException(numeroQuarto);
         quartoMapper.updateEntity(dto, quarto);
-        return quartoMapper.toResponse(quarto);
+        return quartoMapper.toDTO(quarto);
     }
 }
