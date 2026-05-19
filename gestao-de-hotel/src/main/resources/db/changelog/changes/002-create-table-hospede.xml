@@ -12,10 +12,6 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="codigo" type="VARCHAR(10)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-
             <column name="nome" type="VARCHAR(150)">
                 <constraints nullable="false"/>
             </column>
@@ -28,9 +24,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="email" type="VARCHAR(150)">
-                <constraints unique="true"/>
-            </column>
+            <column name="email" type="VARCHAR(150)"/>
 
             <column name="data_nascimento" type="DATE">
                 <constraints nullable="false"/>

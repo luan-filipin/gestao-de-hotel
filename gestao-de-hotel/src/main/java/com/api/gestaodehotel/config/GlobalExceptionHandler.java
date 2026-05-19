@@ -2,9 +2,7 @@ package com.api.gestaodehotel.config;
 
 import com.api.gestaodehotel.dto.response.ErroCampoDTO;
 import com.api.gestaodehotel.dto.response.ErroResponseDTO;
-import com.api.gestaodehotel.exceptions.NumerosDeQuartosDuplicadosException;
-import com.api.gestaodehotel.exceptions.QuartoExistenteException;
-import com.api.gestaodehotel.exceptions.QuartoNaoExisteException;
+import com.api.gestaodehotel.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -108,6 +106,33 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
+    @ExceptionHandler(HospedeJaExisteException.class)
+    public ResponseEntity<ErroResponseDTO> handlerHospedeJaExiste(HospedeJaExisteException ex, HttpServletRequest request) {
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(HospedeNaoExisteCpfException.class)
+    public ResponseEntity<ErroResponseDTO> handlerHospedeNaoExisteCpf(HospedeNaoExisteCpfException ex, HttpServletRequest request) {
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(HospedeJainativoPeloCpfException.class)
+    public ResponseEntity<ErroResponseDTO> handlerHospedeJaInativoPeloCPF(HospedeJainativoPeloCpfException ex, HttpServletRequest request){
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 

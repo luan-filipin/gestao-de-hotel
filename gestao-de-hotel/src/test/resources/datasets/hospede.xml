@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <hospede nome="Joao" cpf="12345778912" telefone="44999999999" email="joao@gmail.com"
+             data_nascimento="1992-05-02" data_cadastro="2026-03-08 01:01:01"
+             nacionalidade="BRASILEIRO" ativo="true" observacao="Teste descricao Joao"/>
+
+    <hospede nome="Maria" cpf="81020839008" telefone="44999899999" email="maria@gmail.com"
+             data_nascimento="1993-07-12" data_cadastro="2026-03-08 01:01:01"
+             nacionalidade="ESTRANGEIRO" ativo="true" observacao="Teste descricao Maria"/>
+
+    <hospede nome="Adriana" cpf="12345673912" telefone="44959999999" email="adriana@gmail.com"
+             data_nascimento="1988-02-08" data_cadastro="2026-03-08 01:01:01"
+             nacionalidade="BRASILEIRO" ativo="false" observacao="Teste descricao Adriana"/>
+</dataset>
