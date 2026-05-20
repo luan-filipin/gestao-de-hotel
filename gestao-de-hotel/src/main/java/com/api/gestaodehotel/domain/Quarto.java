@@ -24,15 +24,16 @@ public class Quarto {
     private Integer numeroQuarto;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(20)")
+    @Column(name = "tipo_quarto", nullable = false, columnDefinition = "VARCHAR(20)")
     private TipoQuarto tipoQuarto;
 
     @Column(nullable = false)
     private Integer capacidade;
 
-    @Column(nullable = false)
+    @Column(name = "preco_por_noite", nullable = false)
     private BigDecimal precoPorNoite;
 
+    @Column(length = 300)
     private String descricao;
 
     @Column(nullable = false)

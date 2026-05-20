@@ -31,6 +31,7 @@ public record HospedeRequestDTO(
         @NotNull(message = "A nacionalidade é obrigatoria")
         Nacionalidade nacionalidade,
 
+        @Size(max = 300)
         String observacao
 ) {
 }
