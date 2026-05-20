@@ -2,6 +2,7 @@ package com.api.gestaodehotel.dto.request;
 
 import com.api.gestaodehotel.domain.enums.TipoQuarto;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
@@ -18,6 +19,7 @@ public record QuartoRequestDTO(
         @NotNull(message = "O preco do quarto é obrigatorio.")
         BigDecimal precoPorNoite,
 
+        @Size(max = 300)
         String descricao
 ) {
 
