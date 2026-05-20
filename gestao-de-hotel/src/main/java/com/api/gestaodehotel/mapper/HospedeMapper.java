@@ -20,7 +20,6 @@ public interface HospedeMapper {
     List<HospedeResponseDTO> toResponseList(List<Hospede> entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "cpf", ignore = true)
     @Mapping(target = "ativo", constant = "true")
     @Mapping(target = "dataCadastro", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy =  NullValuePropertyMappingStrategy.IGNORE)

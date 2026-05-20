@@ -35,4 +35,9 @@ public class HospedeValidador {
         return hospedeExistente;
     }
 
+    public void validarSeNovoCpfJaExiste(String cpfRequisicao, String cpfCorpo){
+        if (!cpfRequisicao.equals(cpfCorpo) && hospedeRepository.existsByCpf(cpfCorpo)) {
+                throw new HospedeJaExisteException(cpfCorpo);
+            }
+    }
 }
