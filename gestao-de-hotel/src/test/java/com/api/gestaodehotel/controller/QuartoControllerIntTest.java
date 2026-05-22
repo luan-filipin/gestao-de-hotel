@@ -243,6 +243,7 @@ class QuartoControllerIntTest {
     void deveAtualizarQuarto() throws Exception{
 
         QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                1001,
                 TipoQuarto.CASAL,
                 2,
                 new BigDecimal("380.00"),
@@ -265,6 +266,7 @@ class QuartoControllerIntTest {
     void deveLancarErroSeNumeroQuartoNaoExistirParaAtualizar() throws Exception{
 
         QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                1001,
                 TipoQuarto.CASAL,
                 2,
                 new BigDecimal("380.00"),
@@ -282,9 +284,30 @@ class QuartoControllerIntTest {
     }
 
     @Test
+    void deveLancarErroSeNumeroQuartoCorpoJaExistirParaAtualizar() throws Exception{
+        QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                2,
+                TipoQuarto.CASAL,
+                2,
+                new BigDecimal("380.00"),
+                "Teste descricao QuartoUpdateRequestDTO"
+        );
+
+        mockMvc.perform(patch("/api/quarto/atualizar/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(quartoUpdateRequestDTO)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensagem").value("Ja existe um quarto com esse numero: 2"))
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.path").value("/api/quarto/atualizar/1"))
+                .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    @Test
     void deveAtualizarQuartoParcialmente() throws Exception{
 
         QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                1001,
                 TipoQuarto.CASAL,
                 null,
                 null,
@@ -305,6 +328,7 @@ class QuartoControllerIntTest {
     void deveLancarErroSeNumeroQuartoNaoForNumericoParaAtualizar() throws Exception{
 
         QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                1001,
                 TipoQuarto.SOLTEIRO,
                 1,
                 new BigDecimal("135.00"),
