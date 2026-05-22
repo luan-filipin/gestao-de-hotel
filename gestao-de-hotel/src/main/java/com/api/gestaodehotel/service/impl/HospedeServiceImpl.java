@@ -9,10 +9,10 @@ import com.api.gestaodehotel.repository.HospedeRepository;
 import com.api.gestaodehotel.service.HospedeService;
 import com.api.gestaodehotel.service.validator.HospedeValidador;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -37,9 +37,9 @@ public class HospedeServiceImpl implements HospedeService {
     }
 
     @Override
-    public List<HospedeResponseDTO> buscaTodosOsHospedes(Boolean ativo) {
-        List<Hospede> hospedes = hospedeRepository.buscaTodosOsHospedesPorStatus(ativo);
-        return hospedeMapper.toResponseList(hospedes);
+    public Page<HospedeResponseDTO> buscaTodosOsHospedes(Boolean ativo, Pageable pageable) {
+        Page<Hospede> hospedes = hospedeRepository.buscaTodosOsHospedesPorStatus(ativo, pageable);
+        return hospedeMapper.toPageResponse(hospedes);
     }
 
     @Transactional

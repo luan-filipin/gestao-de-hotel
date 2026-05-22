@@ -20,6 +20,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -163,47 +167,52 @@ class QuartoServiceImplTest {
     void deveBuscarTodosOsQuartosAtivos(){
 
         Boolean ativo = true;
-        List<Quarto> quartosAtivos = QuartoFixture.criarListaDeQuartosTrue();
+        Page<Quarto> quartosAtivos = QuartoFixture.criarListaDeQuartosTrue();
+        Pageable pageable = PageRequest.of(0, 10);
 
-        when(quartoRepository.findByAtivo(ativo)).thenReturn(quartosAtivos);
+        when(quartoRepository.findByAtivo(ativo, pageable)).thenReturn(quartosAtivos);
 
-        List<QuartoResponseDTO> resultado = quartoService.buscarTodosQuartos(ativo);
+        Page<QuartoResponseDTO> resultado = quartoService.buscarTodosQuartos(ativo, pageable);
 
         assertThat(resultado).isNotNull();
         assertThat(resultado)
                 .extracting(QuartoResponseDTO::id)
                 .containsExactlyInAnyOrder(1L, 2L, 3L);
 
-        verify(quartoRepository).findByAtivo(true);
+        verify(quartoRepository).findByAtivo(any(), any());
     }
     @Test
     void deveBuscarTodoOsQuartosInativos(){
 
         Boolean ativo = false;
-        List<Quarto> quartosInativos = QuartoFixture.criarListaDeQuartosFalse();
+        Page<Quarto> quartosInativos = QuartoFixture.criarListaDeQuartosFalse();
+        Pageable pageable = PageRequest.of(0, 10);
 
-        when(quartoRepository.findByAtivo(ativo)).thenReturn(quartosInativos);
+        when(quartoRepository.findByAtivo(ativo, pageable)).thenReturn(quartosInativos);
 
-        List<QuartoResponseDTO> resultado = quartoService.buscarTodosQuartos(ativo);
+        Page<QuartoResponseDTO> resultado = quartoService.buscarTodosQuartos(ativo, pageable);
 
         assertThat(resultado).isNotNull();
         assertThat(resultado)
                 .extracting(QuartoResponseDTO::id)
                 .containsExactlyInAnyOrder(4L, 5L, 6L);
 
-        verify(quartoRepository).findByAtivo(false);
+        verify(quartoRepository).findByAtivo(any(), any());
     }
 
     @Test
     void deveBuscarTodosOsQuartosQuantoAtivoForNulo(){
 
-        List<Quarto> quartos = new ArrayList<>();
-        quartos.addAll(QuartoFixture.criarListaDeQuartosTrue());
-        quartos.addAll(QuartoFixture.criarListaDeQuartosFalse());
+        List<Quarto> listaQuartos = new ArrayList<>();
+        listaQuartos.addAll(QuartoFixture.criarListaDeQuartosTrue().getContent());
+        listaQuartos.addAll(QuartoFixture.criarListaDeQuartosFalse().getContent());
 
-        when(quartoRepository.findByAtivo(null)).thenReturn(quartos);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Quarto> quartos = new PageImpl<>(listaQuartos);
 
-        List<QuartoResponseDTO> resultado = quartoService.buscarTodosQuartos(null);
+        when(quartoRepository.findByAtivo(null, pageable)).thenReturn(quartos);
+
+        Page<QuartoResponseDTO> resultado = quartoService.buscarTodosQuartos(null, pageable);
 
         assertThat(resultado).isNotNull();
         assertThat(resultado)
@@ -213,7 +222,7 @@ class QuartoServiceImplTest {
                 .extracting(QuartoResponseDTO::ativo)
                 .contains(true, true, true, false, false, false);
 
-        verify(quartoRepository).findByAtivo(null);
+        verify(quartoRepository).findByAtivo(any(), any());
     }
 
     @Test

@@ -4,6 +4,8 @@ import com.api.gestaodehotel.domain.Quarto;
 import com.api.gestaodehotel.domain.enums.TipoQuarto;
 import com.api.gestaodehotel.dto.request.QuartoRequestDTO;
 import com.api.gestaodehotel.dto.request.QuartoUpdateRequestDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,20 +40,20 @@ public class QuartoFixture {
         );
     }
 
-    public static List<Quarto> criarListaDeQuartosTrue(){
+    public static Page<Quarto> criarListaDeQuartosTrue(){
         Quarto quarto = criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"),true);
         Quarto quarto2 = criarQuarto(2L, 2, TipoQuarto.CASAL, 2, new BigDecimal("200.00"), true);
         Quarto quarto3 = criarQuarto(3L, 3, TipoQuarto.SOLTEIRO, 3, new BigDecimal("150.00"), true);
 
-        return List.of(quarto, quarto2, quarto3);
+        return new PageImpl<>(List.of(quarto, quarto2, quarto3));
     }
 
-    public static List<Quarto> criarListaDeQuartosFalse(){
+    public static Page<Quarto> criarListaDeQuartosFalse(){
         Quarto quarto = criarQuarto(4L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), false);
         Quarto quarto2 = criarQuarto(5L, 2, TipoQuarto.CASAL, 2, new BigDecimal("200.00"), false);
         Quarto quarto3 = criarQuarto(6L, 3, TipoQuarto.SOLTEIRO, 3, new BigDecimal("150.00"), false);
 
-        return List.of(quarto, quarto2, quarto3);
+        return new PageImpl<>(List.of(quarto, quarto2, quarto3));
     }
 
     public static QuartoUpdateRequestDTO criarUpdateRequestDTO(Integer numeroQuarto, TipoQuarto tipoQuarto, Integer capacidade, BigDecimal precoPorNoite, String descricao){

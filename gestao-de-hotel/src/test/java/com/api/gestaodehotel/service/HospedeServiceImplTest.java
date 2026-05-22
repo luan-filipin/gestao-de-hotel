@@ -19,6 +19,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -108,53 +112,58 @@ class HospedeServiceImplTest {
 
     @Test
     void deveBuscarHospedesComStatusTrue(){
+        Pageable pageable = PageRequest.of(0, 10);
 
-        List<Hospede> hospedeList = HospedeFixture.criarListHospedeDomainTrue();
-        when(hospedeRepository.buscaTodosOsHospedesPorStatus(true)).thenReturn(hospedeList);
+        Page<Hospede> hospedeList = HospedeFixture.criarListHospedeDomainTrue();
+        when(hospedeRepository.buscaTodosOsHospedesPorStatus(true, pageable)).thenReturn(hospedeList);
 
-        List<HospedeResponseDTO> resultado = hospedeService.buscaTodosOsHospedes(true);
+        Page<HospedeResponseDTO> resultado = hospedeService.buscaTodosOsHospedes(true, pageable);
 
         assertThat(resultado)
                 .isNotNull()
                 .hasSize(3)
                 .allMatch(HospedeResponseDTO::ativo);
 
-        verify(hospedeRepository).buscaTodosOsHospedesPorStatus(any());
+        verify(hospedeRepository).buscaTodosOsHospedesPorStatus(any(), any());
     }
 
     @Test
     void deveBuscarHospedesComStatusFalse(){
 
-        List<Hospede> hospedeList = HospedeFixture.criarListHospedeDomainFalse();
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Hospede> hospedeList = HospedeFixture.criarListHospedeDomainFalse();
 
-        when(hospedeRepository.buscaTodosOsHospedesPorStatus(false)).thenReturn(hospedeList);
+        when(hospedeRepository.buscaTodosOsHospedesPorStatus(false, pageable)).thenReturn(hospedeList);
 
-        List<HospedeResponseDTO> resultado = hospedeService.buscaTodosOsHospedes(false);
+        Page<HospedeResponseDTO> resultado = hospedeService.buscaTodosOsHospedes(false, pageable);
 
         assertThat(resultado)
                 .isNotNull()
                 .hasSize(2)
                 .allMatch(hospede -> !hospede.ativo());
 
-        verify(hospedeRepository).buscaTodosOsHospedesPorStatus(any());
+        verify(hospedeRepository).buscaTodosOsHospedesPorStatus(any(), any());
     }
 
     @Test
     void deveBuscarTodosOsHospedesQuandoStatusNaoForPassado(){
+        Pageable pageable = PageRequest.of(0, 10);
 
-        List<Hospede> hospede = new ArrayList<>();
-        hospede.addAll(HospedeFixture.criarListHospedeDomainTrue());
-        hospede.addAll(HospedeFixture.criarListHospedeDomainFalse());
+        List<Hospede> listHospede = new ArrayList<>();
+        listHospede.addAll(HospedeFixture.criarListHospedeDomainTrue().getContent());
+        listHospede.addAll(HospedeFixture.criarListHospedeDomainFalse().getContent());
 
-        when(hospedeRepository.buscaTodosOsHospedesPorStatus(null)).thenReturn(hospede);
+        Page<Hospede> hospedes = new PageImpl<>(listHospede);
 
-        List<HospedeResponseDTO> resultado = hospedeService.buscaTodosOsHospedes(null);
+        when(hospedeRepository.buscaTodosOsHospedesPorStatus(null, pageable)).thenReturn(hospedes);
+
+        Page<HospedeResponseDTO> resultado = hospedeService.buscaTodosOsHospedes(null, pageable);
 
         assertThat(resultado)
                 .isNotNull()
                 .hasSize(5);
 
-        verify(hospedeRepository).buscaTodosOsHospedesPorStatus(any());
+        verify(hospedeRepository).buscaTodosOsHospedesPorStatus(any(), any());
     }
 
     @Test

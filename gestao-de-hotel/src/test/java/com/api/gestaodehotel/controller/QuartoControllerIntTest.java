@@ -177,27 +177,35 @@ class QuartoControllerIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosAtivos() throws Exception{
-        mockMvc.perform(get("/api/quarto/status").param("ativo", "true"))
+        mockMvc.perform(get("/api/quarto/status")
+                        .param("ativo", "true")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].numeroQuarto").value(1))
-                .andExpect(jsonPath("$[0].ativo").value(true))
-                .andExpect(jsonPath("$[1].numeroQuarto").value(2))
-                .andExpect(jsonPath("$[1].ativo").value(true));
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].numeroQuarto").value(1))
+                .andExpect(jsonPath("$.content[0].ativo").value(true))
+                .andExpect(jsonPath("$.content[1].numeroQuarto").value(2))
+                .andExpect(jsonPath("$.content[1].ativo").value(true));
     }
 
     @Test
     void deveBuscarTodosOsQuartosInativos() throws Exception{
-        mockMvc.perform(get("/api/quarto/status").param("ativo", "false"))
+        mockMvc.perform(get("/api/quarto/status")
+                        .param("ativo", "false")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].numeroQuarto").value(3))
-                .andExpect(jsonPath("$[0].ativo").value(false));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].numeroQuarto").value(3))
+                .andExpect(jsonPath("$.content[0].ativo").value(false));
     }
 
     @Test
     void deveLancarErroSeStatusNaoForBooleano() throws Exception{
-        mockMvc.perform(get("/api/quarto/status").param("ativo", "abc"))
+        mockMvc.perform(get("/api/quarto/status").param("ativo", "abc")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.mensagem").value("O valor do campo ativo deve ser do tipo Boolean"))
                 .andExpect(jsonPath("$.status").value(400))
@@ -207,10 +215,12 @@ class QuartoControllerIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosAtivosEInativos() throws Exception{
-        mockMvc.perform(get("/api/quarto/status"))
+        mockMvc.perform(get("/api/quarto/status")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
-                .andExpect(jsonPath("$[*].ativo", hasItems(true, false)));
+                .andExpect(jsonPath("$.content.length()").value(3))
+                .andExpect(jsonPath("$.content[*].ativo", hasItems(true, false)));
     }
 
     @Test
@@ -254,7 +264,7 @@ class QuartoControllerIntTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(quartoUpdateRequestDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.numeroQuarto").value(1))
+                .andExpect(jsonPath("$.numeroQuarto").value(1001))
                 .andExpect(jsonPath("$.tipoQuarto").value("CASAL"))
                 .andExpect(jsonPath("$.capacidade").value(2))
                 .andExpect(jsonPath("$.precoPorNoite").value("380.0"))

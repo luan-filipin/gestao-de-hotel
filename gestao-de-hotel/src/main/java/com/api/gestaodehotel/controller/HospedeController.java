@@ -7,12 +7,12 @@ import com.api.gestaodehotel.service.HospedeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Validated
 @RequiredArgsConstructor
@@ -33,8 +33,8 @@ public class HospedeController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<List<HospedeResponseDTO>> buscaTodosOsHospedes(@RequestParam(required = false) Boolean ativo){
-        return ResponseEntity.ok(hospedeService.buscaTodosOsHospedes(ativo));
+    public ResponseEntity<Page<HospedeResponseDTO>> buscaTodosOsHospedes(@RequestParam(required = false) Boolean ativo, Pageable pageable){
+        return ResponseEntity.ok(hospedeService.buscaTodosOsHospedes(ativo, pageable));
     }
 
     @PatchMapping("/desativar/cpf/{cpf}")

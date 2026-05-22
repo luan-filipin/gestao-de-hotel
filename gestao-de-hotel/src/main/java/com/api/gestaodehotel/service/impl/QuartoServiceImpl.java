@@ -9,6 +9,8 @@ import com.api.gestaodehotel.repository.QuartoRepository;
 import com.api.gestaodehotel.service.QuartoService;
 import com.api.gestaodehotel.service.validator.QuartoValidador;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,9 +55,9 @@ public class QuartoServiceImpl implements QuartoService {
     }
 
     @Override
-    public List<QuartoResponseDTO> buscarTodosQuartos(Boolean ativo) {
-        List<Quarto> quartos = quartoRepository.findByAtivo(ativo);
-        return quartoMapper.toListResponse(quartos);
+    public Page<QuartoResponseDTO> buscarTodosQuartos(Boolean ativo, Pageable page) {
+        Page<Quarto> quartos = quartoRepository.findByAtivo(ativo, page);
+        return quartoMapper.toPageListResponse(quartos);
     }
 
     @Transactional

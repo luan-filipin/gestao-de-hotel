@@ -6,8 +6,10 @@ import com.github.database.rider.junit5.api.DBRider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,7 +49,8 @@ class HospedeRepositoryIntTest {
 
     @Test
     void deveBuscarTodosOsHospedesComStatusTrue(){
-        List<Hospede> hospedeList = hospedeRepository.buscaTodosOsHospedesPorStatus(true);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Hospede> hospedeList = hospedeRepository.buscaTodosOsHospedesPorStatus(true, pageable);
         assertThat(hospedeList).hasSize(2)
                 .extracting(Hospede::getAtivo)
                 .containsOnly(true);
@@ -55,7 +58,8 @@ class HospedeRepositoryIntTest {
 
     @Test
     void deveBuscarTodosOsHospedesComStatusFalse(){
-        List<Hospede> hospedeList = hospedeRepository.buscaTodosOsHospedesPorStatus(false);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Hospede> hospedeList = hospedeRepository.buscaTodosOsHospedesPorStatus(false, pageable);
         assertThat(hospedeList).hasSize(1)
                 .extracting(Hospede::getAtivo)
                 .containsOnly(false);
@@ -63,7 +67,8 @@ class HospedeRepositoryIntTest {
 
     @Test
     void deveBuscarTodosOsHospedesComStatusNull(){
-        List<Hospede> hospedeList = hospedeRepository.buscaTodosOsHospedesPorStatus(null);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Hospede> hospedeList = hospedeRepository.buscaTodosOsHospedesPorStatus(null, pageable);
         assertThat(hospedeList).hasSize(3)
                 .extracting(Hospede::getAtivo)
                 .containsExactlyInAnyOrder(true, true, false);
