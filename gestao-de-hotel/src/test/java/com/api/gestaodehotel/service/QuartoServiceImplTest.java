@@ -37,8 +37,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class QuartoServiceImplTest {
 
-    private QuartoValidador quartoValidador;
-
     @Mock
     private QuartoRepository quartoRepository;
 
@@ -48,7 +46,7 @@ class QuartoServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        quartoValidador = new QuartoValidador(quartoRepository);
+        QuartoValidador quartoValidador = new QuartoValidador(quartoRepository);
         quartoService = new QuartoServiceImpl(quartoRepository, quartoValidador, quartoMapper);
     }
 
