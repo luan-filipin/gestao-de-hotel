@@ -53,4 +53,10 @@ public class QuartoValidador {
             throw new NumerosDeQuartosDuplicadosException(duplicados);
         }
     }
+
+    public void ValidarSeNovoNumeroQuartoJaExiste(Integer numeroQuartoUrl, Integer numeroQuartoCorpo){
+        if (!numeroQuartoUrl.equals(numeroQuartoCorpo) && quartoRepository.existsByNumeroQuarto(numeroQuartoCorpo)) {
+            throw new  QuartoExistenteException(numeroQuartoCorpo);
+        }
+    }
 }

@@ -69,6 +69,7 @@ public class QuartoServiceImpl implements QuartoService {
     @Override
     public QuartoResponseDTO atualizarQuarto(Integer numeroQuarto, QuartoUpdateRequestDTO dto) {
         Quarto quarto = quartoValidador.buscaQuartoOuLancarException(numeroQuarto);
+        quartoValidador.ValidarSeNovoNumeroQuartoJaExiste(numeroQuarto, dto.numeroQuarto());
         quartoMapper.updateEntity(dto, quarto);
         return quartoMapper.toDTO(quarto);
     }

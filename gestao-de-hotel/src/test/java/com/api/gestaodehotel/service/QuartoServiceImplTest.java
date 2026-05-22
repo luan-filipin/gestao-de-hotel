@@ -263,6 +263,7 @@ class QuartoServiceImplTest {
 
         Integer numeroQuarto = 1;
         QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                1001,
                 TipoQuarto.CASAL,
                 2,
                 new BigDecimal("380.00"),
@@ -287,6 +288,7 @@ class QuartoServiceImplTest {
     void deveAtualizarQuartoIgnorandoCamposNulos(){
         Integer numeroQuarto = 1;
         QuartoUpdateRequestDTO quartoUpdateRequestDTO = new QuartoUpdateRequestDTO(
+                1001,
                 TipoQuarto.CASAL,
                 2,
                 null,
@@ -312,6 +314,7 @@ class QuartoServiceImplTest {
 
         Integer numeroQuarto = 1;
         QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                1001,
                 TipoQuarto.CASAL,
                 2,
                 new BigDecimal("380.00"),
@@ -325,5 +328,29 @@ class QuartoServiceImplTest {
                 .hasMessage("O quarto 1 não foi encontrado");
 
         verify(quartoRepository).findByNumeroQuarto(numeroQuarto);
+    }
+
+    @Test
+    void deveLancarErroQuandoNumeroQuartoForAlteradoEJaExistir(){
+
+        Integer numeroQuarto = 1;
+        QuartoUpdateRequestDTO quartoUpdateRequestDTO = QuartoFixture.criarUpdateRequestDTO(
+                2,
+                TipoQuarto.CASAL,
+                2,
+                new BigDecimal("380.00"),
+                "Teste descricao QuartoUpdateRequestDTO"
+        );
+        Quarto quarto = QuartoFixture.criarQuarto(1L, 1, TipoQuarto.SOLTEIRO, 1, new BigDecimal("175.00"), true);
+
+        when(quartoRepository.findByNumeroQuarto(numeroQuarto)).thenReturn(Optional.of(quarto));
+        when(quartoRepository.existsByNumeroQuarto(quartoUpdateRequestDTO.numeroQuarto())).thenReturn(true);
+
+        assertThatThrownBy(() -> quartoService.atualizarQuarto(numeroQuarto, quartoUpdateRequestDTO))
+                .isInstanceOf(QuartoExistenteException.class)
+                .hasMessage("Ja existe um quarto com esse numero: 2");
+
+        verify(quartoRepository).findByNumeroQuarto(any());
+        verify(quartoRepository).existsByNumeroQuarto(any());
     }
 }

@@ -54,8 +54,9 @@ public class QuartoFixture {
         return List.of(quarto, quarto2, quarto3);
     }
 
-    public static QuartoUpdateRequestDTO criarUpdateRequestDTO(TipoQuarto tipoQuarto, Integer capacidade, BigDecimal precoPorNoite, String descricao){
+    public static QuartoUpdateRequestDTO criarUpdateRequestDTO(Integer numeroQuarto, TipoQuarto tipoQuarto, Integer capacidade, BigDecimal precoPorNoite, String descricao){
         return new QuartoUpdateRequestDTO(
+                numeroQuarto,
                 tipoQuarto,
                 capacidade,
                 precoPorNoite,

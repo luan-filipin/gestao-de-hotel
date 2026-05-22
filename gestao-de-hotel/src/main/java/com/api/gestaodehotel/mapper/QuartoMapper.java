@@ -23,7 +23,6 @@ public interface QuartoMapper {
 
     @Mapping(target = "id" , ignore = true)
     @Mapping(target = "ativo" , constant = "true")
-    @Mapping(target = "numeroQuarto", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(QuartoUpdateRequestDTO dto, @MappingTarget Quarto entity);
 }
