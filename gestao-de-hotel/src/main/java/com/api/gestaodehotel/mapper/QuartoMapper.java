@@ -5,6 +5,7 @@ import com.api.gestaodehotel.dto.request.QuartoRequestDTO;
 import com.api.gestaodehotel.dto.request.QuartoUpdateRequestDTO;
 import com.api.gestaodehotel.dto.response.QuartoResponseDTO;
 import org.mapstruct.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,6 +21,10 @@ public interface QuartoMapper {
     @Mapping(target = "ativo", constant = "true")
     List<Quarto> toEntityList(List<QuartoRequestDTO> dtos);
     List<QuartoResponseDTO> toListResponse(List<Quarto> entity);
+
+    default Page<QuartoResponseDTO> toPageListResponse(Page<Quarto> entity){
+        return entity.map(this::toDTO);
+    }
 
     @Mapping(target = "id" , ignore = true)
     @Mapping(target = "ativo" , constant = "true")

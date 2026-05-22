@@ -91,34 +91,45 @@ class HospedeControllerIntTest {
 
     @Test
     void deveBuscarTodosOsHospedes() throws Exception{
-        mockMvc.perform(get("/api/hospede/status"))
+        mockMvc.perform(get("/api/hospede/status")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3));
+                .andExpect(jsonPath("$.content.length()").value(3));
     }
 
     @Test
     void deveBuscarTodosOsHospedeComStatusTrue() throws Exception{
-        mockMvc.perform(get("/api/hospede/status").param("ativo", "true"))
+        mockMvc.perform(get("/api/hospede/status")
+                        .param("ativo", "true")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].cpf").value("12345778912"))
-                .andExpect(jsonPath("$[0].ativo").value(true))
-                .andExpect(jsonPath("$[1].cpf").value("81020839008"))
-                .andExpect(jsonPath("$[1].ativo").value(true));
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].cpf").value("12345778912"))
+                .andExpect(jsonPath("$.content[0].ativo").value(true))
+                .andExpect(jsonPath("$.content[1].cpf").value("81020839008"))
+                .andExpect(jsonPath("$.content[1].ativo").value(true));
     }
 
     @Test
     void deveBuscarTodosOsHospedeComStatusFalse() throws Exception{
-        mockMvc.perform(get("/api/hospede/status").param("ativo", "false"))
+        mockMvc.perform(get("/api/hospede/status")
+                        .param("ativo", "false")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].cpf").value("12345673912"))
-                .andExpect(jsonPath("$[0].ativo").value(false));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].cpf").value("12345673912"))
+                .andExpect(jsonPath("$.content[0].ativo").value(false));
     }
 
     @Test
     void deveLancarErroSeStatusNaoForBooleano() throws Exception{
-        mockMvc.perform(get("/api/hospede/status").param("ativo", "abc"))
+        mockMvc.perform(get("/api/hospede/status")
+                        .param("ativo", "abc")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.mensagem").value("O valor do campo ativo deve ser do tipo Boolean"))
                 .andExpect(jsonPath("$.status").value(400))

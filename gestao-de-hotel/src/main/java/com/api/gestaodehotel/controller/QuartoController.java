@@ -6,6 +6,8 @@ import com.api.gestaodehotel.dto.response.QuartoResponseDTO;
 import com.api.gestaodehotel.service.QuartoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -37,8 +39,8 @@ public class QuartoController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<List<QuartoResponseDTO>> buscaTodosOsQuartosPeloStatus(@RequestParam(required = false) Boolean ativo){
-        return ResponseEntity.ok(quartoService.buscarTodosQuartos(ativo));
+    public ResponseEntity<Page<QuartoResponseDTO>> buscaTodosOsQuartosPeloStatus(@RequestParam(required = false) Boolean ativo, Pageable page){
+        return ResponseEntity.ok(quartoService.buscarTodosQuartos(ativo, page));
     }
 
     @PatchMapping("/desativar/{numeroQuarto}")

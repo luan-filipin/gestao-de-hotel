@@ -6,8 +6,10 @@ import com.github.database.rider.junit5.api.DBRider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,7 +49,8 @@ class QuartoRepositoryIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosComStatusTrue(){
-        List<Quarto> quartos = quartoRepository.findByAtivo(true);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Quarto> quartos = quartoRepository.findByAtivo(true, pageable);
         assertThat(quartos).hasSize(2)
                 .extracting(Quarto::getAtivo)
                 .containsOnly(true);
@@ -55,7 +58,8 @@ class QuartoRepositoryIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosComStatusFalse(){
-        List<Quarto> quartos = quartoRepository.findByAtivo(false);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Quarto> quartos = quartoRepository.findByAtivo(false, pageable);
         assertThat(quartos).hasSize(1)
                 .extracting(Quarto::getAtivo)
                 .containsOnly(false);
@@ -63,7 +67,8 @@ class QuartoRepositoryIntTest {
 
     @Test
     void deveBuscarTodosOsQuartosComStatusNull(){
-        List<Quarto> quartos = quartoRepository.findByAtivo(null);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Quarto> quartos = quartoRepository.findByAtivo(null, pageable);
         assertThat(quartos).hasSize(3)
                 .extracting(Quarto::getAtivo)
                 .containsExactlyInAnyOrder(true, true, false);
