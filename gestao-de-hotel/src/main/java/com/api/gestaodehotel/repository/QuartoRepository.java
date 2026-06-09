@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface QuartoRepository extends JpaRepository<Quarto, Long> {
 
     boolean existsByNumeroQuarto(Integer numeroQuarto);
+    boolean existsById(Long id);
     Optional<Quarto> findByNumeroQuarto(Integer numeroQuarto);
 
     @Query("SELECT q FROM Quarto q WHERE (:ativo IS NULL OR q.ativo = :ativo)")

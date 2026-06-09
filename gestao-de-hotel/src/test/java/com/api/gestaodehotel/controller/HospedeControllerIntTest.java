@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DBRider
-@DataSet(value = "datasets/hospede.xml")
+@DataSet("datasets/hospede.xml")
 class HospedeControllerIntTest {
 
     @Autowired
@@ -50,7 +50,10 @@ class HospedeControllerIntTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(hospedeRequestDTO)))
                 .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.mensagem").value("Ja existe um hospede com esse cpf: 12345778912"));
+                .andExpect(jsonPath("$.mensagem").value("Ja existe um hospede com esse cpf: 12345778912"))
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.path").value("/api/hospede/criar"))
+                .andExpect(jsonPath("$.timestamp").exists());
     }
 
     @Test

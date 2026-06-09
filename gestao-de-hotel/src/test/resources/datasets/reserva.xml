@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <quarto id="1" numero_quarto="1" tipo_quarto="SOLTEIRO"
+            capacidade="1" preco_por_noite="175.00"
+            descricao="Quarto solteiro teste" ativo="true"/>
+
+    <quarto id="2" numero_quarto="2" tipo_quarto="CASAL"
+            capacidade="2" preco_por_noite="250.00"
+            descricao="Quarto casal teste" ativo="true"/>
+
+    <quarto id="3" numero_quarto="3" tipo_quarto="SUITE"
+            capacidade="3" preco_por_noite="500.00"
+            descricao="Suite teste" ativo="false"/>
+
+    <quarto id="4" numero_quarto="4" tipo_quarto="SUITE"
+            capacidade="3" preco_por_noite="500.00"
+            descricao="Suite teste" ativo="false"/>
+
+    <quarto id="5" numero_quarto="5" tipo_quarto="CASAL"
+            capacidade="3" preco_por_noite="500.00"
+            descricao="Suite teste" ativo="true"/>
+
+    <quarto id="6" numero_quarto="6" tipo_quarto="SUITE"
+            capacidade="3" preco_por_noite="500.00"
+            descricao="Suite teste" ativo="true"/>
+
+    <hospede id="1" nome="Joao" cpf="12345778912" telefone="44999999999" email="joao@gmail.com"
+             data_nascimento="1992-05-02" data_cadastro="2026-03-08 01:01:01"
+             nacionalidade="BRASILEIRO" ativo="true" observacao="Teste descricao Joao"/>
+
+    <hospede id="2" nome="Maria" cpf="81020839008" telefone="44999899999" email="maria@gmail.com"
+             data_nascimento="1993-07-12" data_cadastro="2026-03-08 01:01:01"
+             nacionalidade="ESTRANGEIRO" ativo="true" observacao="Teste descricao Maria"/>
+
+    <hospede id="3" nome="Adriana" cpf="12345673912" telefone="44959999999" email="adriana@gmail.com"
+             data_nascimento="1988-02-08" data_cadastro="2026-03-08 01:01:01"
+             nacionalidade="BRASILEIRO" ativo="false" observacao="Teste descricao Adriana"/>
+
+    <hospede id="4" nome="Paulo" cpf="12345973912" telefone="44959999999" email="adriana@gmail.com"
+             data_nascimento="1988-02-08" data_cadastro="2026-03-08 01:01:01"
+             nacionalidade="BRASILEIRO" ativo="false" observacao="Teste descricao Adriana"/>
+
+    <reserva id="1" data_criacao="2026-03-08 01:01:01" data_check_in="2026-04-08 01:01:01"
+             quantidade_dias="8" data_check_out="2026-04-11 01:01:01" valor_total="323.00"
+             status="PENDENTE" quarto_id="1" hospede_id="1" ativo="true" observacao="Descricao 1"/>
+
+    <reserva id="2" data_criacao="2026-02-08 01:01:01" data_check_in="2026-05-08 01:01:01"
+             quantidade_dias="4" data_check_out="2026-04-11 01:01:01" valor_total="323.00"
+             status="PENDENTE" quarto_id="2" hospede_id="2" ativo="true" observacao="Descricao 2"/>
+
+    <reserva id="3" data_criacao="2026-01-08 01:01:01" data_check_in="2026-03-08 01:01:01"
+             quantidade_dias="4" data_check_out="2026-04-11 01:01:01" valor_total="323.00"
+             status="PENDENTE" quarto_id="3" hospede_id="3" ativo="false" observacao="Descricao 3"/>
+
+</dataset>

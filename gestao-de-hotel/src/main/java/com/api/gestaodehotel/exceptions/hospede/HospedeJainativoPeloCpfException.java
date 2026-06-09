@@ -1,4 +1,4 @@
-package com.api.gestaodehotel.exceptions;
+package com.api.gestaodehotel.exceptions.hospede;
 
 public class HospedeJainativoPeloCpfException extends RuntimeException {
     public HospedeJainativoPeloCpfException(String cpf) {
