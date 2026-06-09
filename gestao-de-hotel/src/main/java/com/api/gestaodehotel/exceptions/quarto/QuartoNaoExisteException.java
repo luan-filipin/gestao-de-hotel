@@ -1,4 +1,4 @@
-package com.api.gestaodehotel.exceptions;
+package com.api.gestaodehotel.exceptions.quarto;
 
 public class QuartoNaoExisteException extends RuntimeException{
     public QuartoNaoExisteException(Integer numeroQuarto) {

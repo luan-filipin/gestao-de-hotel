@@ -1,9 +1,7 @@
 package com.api.gestaodehotel.service.validator;
 
 import com.api.gestaodehotel.domain.Hospede;
-import com.api.gestaodehotel.exceptions.HospedeJaExisteException;
-import com.api.gestaodehotel.exceptions.HospedeJainativoPeloCpfException;
-import com.api.gestaodehotel.exceptions.HospedeNaoExisteCpfException;
+import com.api.gestaodehotel.exceptions.hospede.*;
 import com.api.gestaodehotel.repository.HospedeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,6 +21,16 @@ public class HospedeValidador {
     public Hospede validaSeHospedeNaoExistePeloCpf(String cpf){
         return hospedeRepository.findByCpf(cpf)
                 .orElseThrow(() -> new HospedeNaoExisteCpfException(cpf));
+    }
+
+    public Hospede validaHospedeExisteENaoInativo(Long id){
+        Hospede hospede = hospedeRepository.findById(id)
+                .orElseThrow(() -> new HospedeNaoExisteIdException(id));
+
+        if (Boolean.FALSE.equals(hospede.getAtivo())) {
+            throw new HospedeInativoException(id);
+        }
+        return hospede;
     }
 
     public Hospede validaSeHospedeExisteEInativoPeloCpf(String cpf){

@@ -41,7 +41,7 @@ public class Reserva {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(20)")
-    private StatusReserva status;
+    private StatusReserva status = StatusReserva.PENDENTE;
 
     @ManyToOne
     @JoinColumn(name = "quarto_id", nullable = false)
@@ -51,6 +51,18 @@ public class Reserva {
     @JoinColumn(name = "hospede_id", nullable = false)
     private Hospede hospede;
 
+    @Column(nullable = false)
+    private Boolean ativo = true;
+
     @Column(length = 300)
     private String observacao;
+
+
+    public void calculaDataCheckOut(){
+        this.dataCheckOut = this.dataCheckIn.plusDays(this.quantidadeDias);
+    }
+
+    public void calculaValorTotal(){
+        this.valorTotal = this.quarto.getPrecoPorNoite().multiply(BigDecimal.valueOf(this.quantidadeDias));
+    }
 }

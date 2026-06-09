@@ -1,10 +1,7 @@
 package com.api.gestaodehotel.service.validator;
 
 import com.api.gestaodehotel.domain.Quarto;
-import com.api.gestaodehotel.exceptions.NumerosDeQuartosDuplicadosException;
-import com.api.gestaodehotel.exceptions.QuartoEstaInativoException;
-import com.api.gestaodehotel.exceptions.QuartoExistenteException;
-import com.api.gestaodehotel.exceptions.QuartoNaoExisteException;
+import com.api.gestaodehotel.exceptions.quarto.*;
 import com.api.gestaodehotel.repository.QuartoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -28,6 +25,17 @@ public class QuartoValidador {
     public Quarto buscaQuartoOuLancarException(Integer numeroQuarto) {
         return quartoRepository.findByNumeroQuarto(numeroQuarto)
                 .orElseThrow(() -> new QuartoNaoExisteException(numeroQuarto));
+    }
+
+    public Quarto buscaQuartoAtivoPorId(Long id){
+        Quarto quarto = quartoRepository.findById(id)
+                .orElseThrow(() -> new QuartoNaoExistePeloIdException(id));
+
+        if (Boolean.FALSE.equals(quarto.getAtivo())) {
+            throw new QuartoInativoException(quarto.getNumeroQuarto());
+        }
+
+        return quarto;
     }
 
     public Quarto buscaQuartoEValidaSeInativoOuLancaException(Integer numeroQuarto) {
