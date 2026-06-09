@@ -2,7 +2,11 @@ package com.api.gestaodehotel.config;
 
 import com.api.gestaodehotel.dto.response.ErroCampoDTO;
 import com.api.gestaodehotel.dto.response.ErroResponseDTO;
-import com.api.gestaodehotel.exceptions.*;
+import com.api.gestaodehotel.exceptions.hospede.*;
+import com.api.gestaodehotel.exceptions.quarto.*;
+import com.api.gestaodehotel.exceptions.reserva.IdUrlDiferenteIdCorpoException;
+import com.api.gestaodehotel.exceptions.reserva.ReservaExistenteException;
+import com.api.gestaodehotel.exceptions.reserva.ReservaNaoExisteException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -136,4 +140,66 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
+    @ExceptionHandler(ReservaExistenteException.class)
+    public ResponseEntity<ErroResponseDTO> handlerReservaExistente(ReservaExistenteException ex, HttpServletRequest request) {
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(QuartoNaoExistePeloIdException.class)
+    public ResponseEntity<ErroResponseDTO> handlerQuartoNaoExistePeloId(QuartoNaoExistePeloIdException ex, HttpServletRequest request) {
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(QuartoInativoException.class)
+    public ResponseEntity<ErroResponseDTO> handlerQuartoInativoException(QuartoInativoException ex, HttpServletRequest request){
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
+    @ExceptionHandler(HospedeNaoExisteIdException.class)
+    public ResponseEntity<ErroResponseDTO> handlerHospedeNaoExisteId(HospedeNaoExisteIdException ex, HttpServletRequest request) {
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(HospedeInativoException.class)
+    public ResponseEntity<ErroResponseDTO> handlerHospedeInativo(HospedeInativoException ex, HttpServletRequest request){
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
+    @ExceptionHandler(ReservaNaoExisteException.class)
+    public ResponseEntity<ErroResponseDTO> handlerReservaNaoExiste(ReservaNaoExisteException ex, HttpServletRequest request) {
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(IdUrlDiferenteIdCorpoException.class)
+    public ResponseEntity<ErroResponseDTO> handlerIdUrlDiferenteIdCorpo(IdUrlDiferenteIdCorpoException ex, HttpServletRequest request){
+        ErroResponseDTO erro = new ErroResponseDTO(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
 }

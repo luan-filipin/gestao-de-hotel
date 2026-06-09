@@ -7,5 +7,6 @@
 
     <include file="db/changelog/changes/001-create-table-quarto.xml"/>
     <include file="db/changelog/changes/002-create-table-hospede.xml"/>
+    <include file="db/changelog/changes/003-create-table-reserva.xml"/>
 
 </databaseChangeLog>
