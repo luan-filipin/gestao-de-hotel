@@ -8,7 +8,7 @@ API REST para gerenciamento de um hotel, desenvolvida com foco em boas práticas
  
 | Tecnologia | Detalhe |
 |---|---|
-| Java | 21 |
+| Java | 25 |
 | Spring Boot | Framework principal |
 | Spring Web | Exposição dos endpoints REST |
 | Spring Data JPA / Hibernate | Mapeamento objeto-relacional |
